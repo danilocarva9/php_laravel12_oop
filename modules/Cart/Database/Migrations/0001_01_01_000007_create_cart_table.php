@@ -19,6 +19,8 @@ return new class extends Migration
             $table->decimal('price', 10, 2);
             $table->string('status');
             $table->timestamps();
+
+            $table->unique(['customer_id', 'product_id'], 'cart_items_customer_product_unique');
         });
     }
 
