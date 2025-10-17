@@ -2,29 +2,46 @@
 
 namespace Modules\Cart\Service;
 
+use Illuminate\Support\Facades\Auth;
 use Modules\Cart\Interfaces\CartInterface;
+use Modules\Cart\Models\CartItem;
+use Modules\Product\Models\Product;
 
 class CartService implements CartInterface
 {
-    public function create(array $data): array
+    public function add(int $productId, int $quantity): array
     {
-        // Simulate order creation logic
-        return [
-            'user_id' => $data['user_id'],
-            'product_id' => $data['product_id'],
-            'order_id' => rand(1000, 9999),
-            'status' => 'created',
-            'data' => $data,
-        ];
+        $user = Auth::user();
+
+        $product = Product::findOrFail($productId);
+
+        if ($quantity > $product->stock) {
+            throw new \InvalidArgumentException('Requested quantity exceeds available stock.');
+        }
+
+        return CartItem::updateOrCreate(
+            [
+                'customer_id' => $user->customer->id,
+                'product_id' => $productId,
+            ],
+            [
+                'quantity' => $quantity,
+                'price' => $this->calculateTotal($product->price, $quantity),
+            ]
+        );
     }
 
-    public function get(int $orderId): ?array
+    public function list(): ?array
     {
         // Simulate fetching an order
         return [
-            'order_id' => $orderId,
-            'status' => 'created',
+            'total' => 12312,
             'items' => [],
         ];
+    }
+
+    private function calculateTotal(float $price, int $quantity): float
+    {
+        return $price * $quantity;
     }
 }

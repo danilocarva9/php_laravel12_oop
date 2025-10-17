@@ -3,19 +3,28 @@
 namespace Modules\Order\Service;
 
 use Modules\Order\Interfaces\OrderInterface;
+use Modules\Order\Models\Order;
 
 class OrderService implements OrderInterface
 {
-    public function create(array $data): array
+    public function create(int $customerId, array $items): array
     {
         // Simulate order creation logic
-        return [
-            'user_id' => $data['user_id'],
-            'product_id' => $data['product_id'],
-            'order_id' => rand(1000, 9999),
-            'status' => 'created',
-            'data' => $data,
-        ];
+        $order = Order::create([
+            'customer_id' => $customerId,
+            'status' => 'PENDING',
+            'total_amount' => 0
+        ]);
+
+        foreach ($items as $item) {
+            $order->items()->create([
+                'product_id' => $item['product_id'],
+                'quantity' => $item['quantity'],
+                'price' => $item['price'],
+            ]);
+        }
+
+        return $order;
     }
 
     public function get(int $orderId): ?array

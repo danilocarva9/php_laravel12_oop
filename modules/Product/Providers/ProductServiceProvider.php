@@ -2,6 +2,7 @@
 
 namespace Modules\Product\Providers;
 
+use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\ServiceProvider;
 
 class ProductServiceProvider extends ServiceProvider
@@ -9,7 +10,12 @@ class ProductServiceProvider extends ServiceProvider
     /**
      * Register any application services.
      */
-    public function register(): void {}
+    public function register(): void
+    {
+        Factory::guessFactoryNamesUsing(
+            fn(string $modelName) => 'Modules\\Product\\Database\\Factories\\' . class_basename($modelName) . 'Factory'
+        );
+    }
 
     /**
      * Bootstrap any application services.

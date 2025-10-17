@@ -9,7 +9,6 @@ use Modules\Order\Models\OrderItem;
 
 class Product extends Model
 {
-
     use HasFactory;
 
     protected $fillable = [

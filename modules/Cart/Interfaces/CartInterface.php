@@ -4,7 +4,7 @@ namespace Modules\Cart\Interfaces;
 
 interface CartInterface
 {
-    public function create(array $data): array;
+    public function add(int $productId, int $quantity): array;
 
-    public function get(int $cartId): ?array;
+    public function list(): ?array;
 }
