@@ -1,19 +1,20 @@
 <?php
 
-namespace Modules\Order\Providers;
+namespace Modules\Cart\Providers;
 
 use Illuminate\Support\ServiceProvider;
-use Modules\Order\Interfaces\OrderInterface;
-use Modules\Order\Service\OrderService;
+use Modules\Cart\Interfaces\CartInterface;
+use Modules\Cart\Service\CartService;
+use Modules\Cart\Providers\RouteServiceProvider;
 
-class OrderServiceProvider extends ServiceProvider
+class CartServiceProvider extends ServiceProvider
 {
     /**
      * Register any application services.
      */
     public function register(): void
     {
-        $this->app->singleton(OrderInterface::class, fn() => new OrderService());
+        $this->app->singleton(CartInterface::class, fn() => new CartService());
     }
 
     /**

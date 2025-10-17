@@ -1,28 +1,25 @@
 <?php
 
-namespace Modules\Product\Models;
+namespace Modules\Customer\Models;
 
+use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Modules\Cart\Models\CartItem;
-use Modules\Order\Models\OrderItem;
 
-class Product extends Model
+class Customer extends Model
 {
-
     use HasFactory;
 
     protected $fillable = [
-        'name',
-        'description',
-        'sku',
-        'price',
-        'stock'
+        'user_id',
+        'first_name',
+        'last_name',
     ];
 
-    public function orderItems()
+    public function user()
     {
-        return $this->hasMany(OrderItem::class);
+        return $this->belongsTo(User::class);
     }
 
     public function cartItems()

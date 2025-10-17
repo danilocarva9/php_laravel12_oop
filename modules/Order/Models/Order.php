@@ -4,6 +4,8 @@ namespace Modules\Order\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Modules\Payment\Models\Payment;
+use Modules\Shipment\Models\Shipment;
 
 class Order extends Model
 {
@@ -11,20 +13,25 @@ class Order extends Model
     use HasFactory;
 
     protected $fillable = [
-        'user_id',
-        'product_id',
-        'quantity',
-        'total_price',
+        'customer_id',
         'status',
+        'total_amount',
+        'payment_status',
+        'shipment_status',
     ];
 
-    public function user()
+    public function items()
     {
-        return $this->belongsTo(\App\Models\User::class);
+        return $this->hasMany(OrderItem::class);
     }
 
-    public function product()
+    public function payments()
     {
-        return $this->belongsTo(\Modules\Product\Models\Product::class);
+        return $this->hasMany(Payment::class);
+    }
+
+    public function shipments()
+    {
+        return $this->hasMany(Shipment::class);
     }
 }

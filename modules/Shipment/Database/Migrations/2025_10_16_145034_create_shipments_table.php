@@ -14,9 +14,10 @@ return new class extends Migration
         Schema::create('shipments', function (Blueprint $table) {
             $table->id();
             $table->foreignId('order_id')->constrained()->onUpdate('cascade')->onDelete('cascade')->index('shipments_order_id');
-            $table->date('shipment_date');
-            $table->string('status');
-            $table->string('tracking_number')->nullable();
+            $table->string('tracking_number')->unique();
+            $table->string('carrier');
+            $table->date('shipped_at');
+            $table->date('delivered_at')->nullable();
             $table->timestamps();
         });
     }
