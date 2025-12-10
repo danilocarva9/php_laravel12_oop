@@ -34,7 +34,7 @@ services:
     container_name: laravel_mariadb
     restart: always
     environment:
-      MYSQL_ROOT_PASSWORD: ${DB_ROOT_PASSWORD:-root}
+      MYSQL_ROOT_PASSWORD: ${DB_PASSWORD:-root}
       MYSQL_DATABASE: ${DB_DATABASE:-laravel}
       MYSQL_USER: ${DB_USERNAME:-laravel}
       MYSQL_PASSWORD: ${DB_PASSWORD:-secret}

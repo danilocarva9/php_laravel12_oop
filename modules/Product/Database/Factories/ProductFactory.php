@@ -19,8 +19,25 @@ class ProductFactory extends Factory
      */
     public function definition(): array
     {
+        $productNames = [
+            'Laptop',
+            'Smartphone',
+            'Headphones',
+            'Camera',
+            'Smartwatch',
+            'Tablet',
+            'Monitor',
+            'Keyboard',
+            'Mouse',
+            'Printer',
+        ];
+
+        $name = $this->faker->unique()->randomElement($productNames);
+        $brand = $this->faker->company;
+        $modelNumber = strtoupper($this->faker->bothify('??###'));
+
         return [
-            'name' => fake()->word(),
+            'name' => "{$brand} {$name} {$modelNumber}",
             'description' => fake()->sentence(),
             'sku' => fake()->unique()->ean8(),
             'price' => fake()->randomFloat(2, 10, 500),

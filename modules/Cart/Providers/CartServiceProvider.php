@@ -24,5 +24,6 @@ class CartServiceProvider extends ServiceProvider
     {
         $this->loadMigrationsFrom(__DIR__ . '/../Database/Migrations');
         $this->app->register(RouteServiceProvider::class);  //$this->loadRoutesFrom(__DIR__ . '/../routes.php');
+        $this->mergeConfigFrom(__DIR__ . '/../config.php', 'cart');
     }
 }
