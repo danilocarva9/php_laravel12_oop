@@ -15,7 +15,8 @@ WORKDIR /var/www/html
 COPY . .
 
 # Set permissions for Laravel storage and cache
-RUN chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache
+RUN mkdir -p storage bootstrap/cache \
+    && chown -R www-data:www-data storage bootstrap/cache
 
 # Expose port (not required for FPM, only for debugging)
 EXPOSE 9000
