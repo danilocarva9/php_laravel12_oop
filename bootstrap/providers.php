@@ -2,6 +2,7 @@
 
 return [
     App\Providers\AppServiceProvider::class,
+    Modules\Auth\Providers\AuthServiceProvider::class,
     Modules\Order\Providers\OrderServiceProvider::class,
     Modules\Product\Providers\ProductServiceProvider::class,
     Modules\Payment\Providers\PaymentServiceProvider::class,
