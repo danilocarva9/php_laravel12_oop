@@ -8,30 +8,22 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Modules\Auth\Http\Requests\AuthLoginRequest;
 use Modules\Auth\Http\Requests\AuthRegisterRequest;
+use Modules\Auth\Services\LoginService;
 
 class AuthController extends Controller
 {
+
+    public function __construct(private LoginService $loginService) {}
+
     public function register(AuthRegisterRequest $request)
     {
-        User::create([
-            'name' => $request->name,
-            'email' => $request->email,
-            'password' => Hash::make($request->password),
-        ]);
-        // Registration logic here
+        $this->loginService->register($request->validated());
         return response()->json(['message' => 'Registration successful']);
     }
 
     public function login(AuthLoginRequest $request)
     {
-
-        $user = User::where('email', $request->email)->first();
-
-        if (!$user || !Hash::check($request->password, $user->password)) {
-            return response()->json(['message' => 'Invalid credentials'], 401);
-        }
-
-        $token = $user->createToken('auth_token')->plainTextToken;
+        $token = $this->loginService->login($request->validated());
 
         return response()->json([
             'access_token' => $token,
@@ -41,8 +33,7 @@ class AuthController extends Controller
 
     public function logout(Request $request)
     {
-        $request->user()->currentAccessToken()->delete();
-        // Logout logic here
+        $this->loginService->logout($request);
         return response()->json(['message' => 'Logout successful']);
     }
 }
