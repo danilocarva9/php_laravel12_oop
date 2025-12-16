@@ -1,8 +1,12 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use Modules\Order\Http\Controllers\OrderController;
 
-Route::prefix('order')->group(function () {
-    Route::post('/create', [\Modules\Order\Http\Controllers\OrderController::class, 'create']);
-    Route::get('/{orderId}', [\Modules\Order\Http\Controllers\OrderController::class, 'get']);
+Route::group(['prefix' => 'order', 'middleware' => 'auth:sanctum'], function () {
+    Route::get('{id}', [OrderController::class, 'show']);
+    Route::post('/', [OrderController::class, 'create']);
+
+    Route::post('{id}/confirm', [OrderController::class, 'confirm']);
+    Route::post('{id}/cancel', [OrderController::class, 'cancel']);
 });

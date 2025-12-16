@@ -3,21 +3,23 @@
 namespace Modules\Order\Http\Controllers;
 
 use App\Http\Controllers\Controller;
-use Modules\Order\Http\Requests\CreateRequest;
+use Modules\Order\Http\Requests\OrderCreateRequest;
+use Modules\Order\Http\Resources\OrderResource;
 use Modules\Order\Interfaces\OrderInterface;
+use Modules\Order\Models\Order;
 
 class OrderController extends Controller
 {
     public function __construct(private OrderInterface $order) {}
 
-    public function create(CreateRequest $request): array
+    public function show(int $id): OrderResource
     {
-        $data = $request->all();
-        return $this->order->create($data);
+        return $this->order->get($id);
     }
 
-    public function get(int $orderId): ?array
+    public function create(OrderCreateRequest $request): Order
     {
-        return $this->order->get($orderId);
+        $items = $request->validated();
+        return $this->order->create($items['products']);
     }
 }

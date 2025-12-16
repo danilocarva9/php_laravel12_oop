@@ -4,7 +4,7 @@ namespace Modules\Order\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class CreateRequest extends FormRequest
+class OrderCreateRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -22,7 +22,9 @@ class CreateRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'data' => 'required|array',
+            'products' => 'required|array|min:1',
+            'products.*.id' => 'required|integer|exists:products,id',
+            'products.*.quantity' => 'required|integer|min:1',
         ];
     }
 }

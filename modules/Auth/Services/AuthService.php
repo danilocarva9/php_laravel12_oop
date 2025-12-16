@@ -5,8 +5,9 @@ namespace Modules\Auth\Services;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
 use Modules\Auth\Exceptions\FailedLoginException;
+use Modules\Customer\Models\Customer;
 
-class LoginService
+class AuthService
 {
 
     /**
@@ -17,10 +18,16 @@ class LoginService
      */
     public function register(array $request): void
     {
-        User::create([
+        $user = User::create([
             'name' => $request['name'],
             'email' => $request['email'],
             'password' => Hash::make($request['password']),
+        ]);
+
+        Customer::firstOrCreate([
+            'user_id' => $user->id,
+            'first_name' => strtok($request['name'], ' '),
+            'last_name' => substr($request['name'], strrpos($request['name'], ' ') + 1)
         ]);
     }
 
@@ -44,6 +51,12 @@ class LoginService
         return $user->createToken('auth_token')->plainTextToken;
     }
 
+    /**
+     * Handle user logout by deleting the current access token.
+     *
+     * @param mixed $request
+     * @return void
+     */
     public function logout($request): void
     {
         $request->user()->currentAccessToken()->delete();
