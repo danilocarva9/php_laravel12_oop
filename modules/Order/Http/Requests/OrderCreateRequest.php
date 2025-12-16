@@ -27,4 +27,15 @@ class OrderCreateRequest extends FormRequest
             'products.*.quantity' => 'required|integer|min:1',
         ];
     }
+
+    public function withValidator($validator)
+    {
+        $validator->after(function ($validator) {
+            $key = $this->header('Idempotency-Key');
+
+            if (!$key) {
+                $validator->errors()->add('Idempotency-Key', 'The Idempotency-Key header is required.');
+            }
+        });
+    }
 }

@@ -13,6 +13,7 @@ class Order extends Model
     use HasFactory;
 
     protected $fillable = [
+        'idempotency_key',
         'customer_id',
         'status',
         'total_amount',

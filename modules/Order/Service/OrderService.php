@@ -2,6 +2,7 @@
 
 namespace Modules\Order\Service;
 
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 use Modules\Order\Exceptions\OrderNotFoundException;
 use Modules\Order\Http\Resources\OrderResource;
@@ -15,13 +16,13 @@ class OrderService implements OrderInterface
      * Create a new order.
      *
      * @param array $products
-     * @return Order
+     * @return OrderResource
      */
-    public function create(array $products): Order
+    public function create(string $idempotencyKey, array $products): OrderResource
     {
         $user = auth('sanctum')->user();
 
-        return DB::transaction(function () use ($products, $user) {
+        return DB::transaction(function () use ($products, $user, $idempotencyKey) {
 
             $totalAmount = 0;
             $items = [];
@@ -45,6 +46,7 @@ class OrderService implements OrderInterface
             }
 
             $order = Order::create([
+                'idempotency_key' => $idempotencyKey,
                 'customer_id' => $user->customer->id,
                 'status' => 'PENDING',
                 'payment_status' => 'UNPAID',
@@ -60,7 +62,9 @@ class OrderService implements OrderInterface
                 ]);
             }
 
-            return $order;
+            return new OrderResource(
+                $order->load('items.product')
+            );
         });
     }
 
@@ -76,7 +80,7 @@ class OrderService implements OrderInterface
         $order = Order::find($id);
 
         if (!$order) {
-            throw new OrderNotFoundException("Order not found");
+            throw new OrderNotFoundException();
         }
 
         return new OrderResource(

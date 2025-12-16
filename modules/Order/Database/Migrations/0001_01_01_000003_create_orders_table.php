@@ -13,6 +13,7 @@ return new class extends Migration
     {
         Schema::create('orders', function (Blueprint $table) {
             $table->id();
+            $table->string('idempotency_key')->unique();
             $table->foreignId('customer_id')->constrained()->onUpdate('cascade')->onDelete('cascade')->index('orders_customer_id');
             $table->string('status');
             $table->decimal('total_amount', 10, 2);
