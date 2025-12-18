@@ -25,17 +25,17 @@ class OrderCreateRequest extends FormRequest
             'products' => 'required|array|min:1',
             'products.*.id' => 'required|integer|exists:products,id',
             'products.*.quantity' => 'required|integer|min:1',
+            'idempotency_key' => 'required|string|max:255|unique:orders,idempotency_key',
         ];
     }
 
-    public function withValidator($validator)
+    /**
+     * Prepare the data for validation.
+     */
+    protected function prepareForValidation(): void
     {
-        $validator->after(function ($validator) {
-            $key = $this->header('Idempotency-Key');
-
-            if (!$key) {
-                $validator->errors()->add('Idempotency-Key', 'The Idempotency-Key header is required.');
-            }
-        });
+        $this->merge([
+            'idempotency_key' => $this->header('Idempotency-Key'),
+        ]);
     }
 }

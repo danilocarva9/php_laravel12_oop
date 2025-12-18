@@ -19,7 +19,6 @@ class OrderController extends Controller
 
     public function create(OrderCreateRequest $request): OrderResource
     {
-        $items = $request->validated();
-        return $this->order->create($request->header('Idempotency-Key'), $items['products']);
+        return $this->order->create($request->validated());
     }
 }

@@ -9,7 +9,7 @@ use Symfony\Component\HttpFoundation\Response;
 
 class IdempotencyMiddleware
 {
-    private const TTL = 5; // 10 minutes
+    private const TTL = 1; // 10 minutes
 
     public function handle(Request $request, Closure $next)
     {

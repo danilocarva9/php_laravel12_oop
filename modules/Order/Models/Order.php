@@ -4,6 +4,7 @@ namespace Modules\Order\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Modules\Order\Enums\OrderStatusEnum;
 use Modules\Payment\Models\Payment;
 use Modules\Shipment\Models\Shipment;
 
@@ -19,6 +20,11 @@ class Order extends Model
         'total_amount',
         'payment_status',
         'shipment_status',
+    ];
+
+    protected $casts = [
+        'total_amount' => 'decimal:2',
+        'status'       => OrderStatusEnum::class,
     ];
 
     public function items()

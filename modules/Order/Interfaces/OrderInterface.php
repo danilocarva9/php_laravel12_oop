@@ -6,7 +6,7 @@ use Modules\Order\Http\Resources\OrderResource;
 
 interface OrderInterface
 {
-    public function create(string $idempotencyKey, array $requests): OrderResource;
+    public function create(array $order): OrderResource;
 
     public function get(int $id): OrderResource;
 }

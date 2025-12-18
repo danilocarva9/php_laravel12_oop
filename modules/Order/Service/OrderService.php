@@ -4,6 +4,7 @@ namespace Modules\Order\Service;
 
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
+use Modules\Order\DTO\CreateOrderDTO;
 use Modules\Order\Exceptions\OrderNotFoundException;
 use Modules\Order\Http\Resources\OrderResource;
 use Modules\Order\Interfaces\OrderInterface;
@@ -18,16 +19,16 @@ class OrderService implements OrderInterface
      * @param array $products
      * @return OrderResource
      */
-    public function create(string $idempotencyKey, array $products): OrderResource
+    public function create(array $order): OrderResource
     {
         $user = auth('sanctum')->user();
 
-        return DB::transaction(function () use ($products, $user, $idempotencyKey) {
+        return DB::transaction(function () use ($order, $user) {
 
             $totalAmount = 0;
             $items = [];
 
-            foreach ($products as $product) {
+            foreach ($order['products'] as $product) {
                 $productModel = Product::where('id', $product['id'])->select('id', 'price')->first();
 
                 if (!$productModel) {
@@ -45,14 +46,8 @@ class OrderService implements OrderInterface
                 ];
             }
 
-            $order = Order::create([
-                'idempotency_key' => $idempotencyKey,
-                'customer_id' => $user->customer->id,
-                'status' => 'PENDING',
-                'payment_status' => 'UNPAID',
-                'shipment_status' => 'PENDING',
-                'total_amount' => $totalAmount
-            ]);
+            $order = new CreateOrderDTO($order['idempotency_key'], $user->customer->id, $totalAmount);
+            $order = Order::create($order->toArray());
 
             foreach ($items as $item) {
                 $order->items()->create([
