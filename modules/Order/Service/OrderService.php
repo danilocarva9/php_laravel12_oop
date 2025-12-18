@@ -5,6 +5,7 @@ namespace Modules\Order\Service;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 use Modules\Order\DTO\CreateOrderDTO;
+use Modules\Order\DTO\CreateOrderItemsDTO;
 use Modules\Order\Exceptions\OrderNotFoundException;
 use Modules\Order\Http\Resources\OrderResource;
 use Modules\Order\Interfaces\OrderInterface;
@@ -50,11 +51,14 @@ class OrderService implements OrderInterface
             $order = Order::create($order->toArray());
 
             foreach ($items as $item) {
-                $order->items()->create([
-                    'product_id' => $item['product_id'],
-                    'quantity' => $item['quantity'],
-                    'price' => $item['price'],
-                ]);
+
+                $itemDTO = new CreateOrderItemsDTO(
+                    productId: $item['product_id'],
+                    quantity: $item['quantity'],
+                    price: $item['price']
+                );
+
+                $order->items()->create($itemDTO->toArray());
             }
 
             return new OrderResource(
