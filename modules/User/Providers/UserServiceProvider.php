@@ -1,11 +1,11 @@
 <?php
 
-namespace Modules\Product\Providers;
+namespace Modules\User\Providers;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\ServiceProvider;
 
-class ProductServiceProvider extends ServiceProvider
+class UserServiceProvider extends ServiceProvider
 {
     /**
      * Register any application services.
@@ -13,7 +13,7 @@ class ProductServiceProvider extends ServiceProvider
     public function register(): void
     {
         // Factory::guessFactoryNamesUsing(
-        //     fn(string $modelName) => 'Modules\\Product\\Database\\Factories\\' . class_basename($modelName) . 'Factory'
+        //     fn(string $modelName) => 'Modules\\User\\Database\\Factories\\' . class_basename($modelName) . 'Factory'
         // );
     }
 
@@ -24,6 +24,6 @@ class ProductServiceProvider extends ServiceProvider
     {
         $this->loadMigrationsFrom(__DIR__ . '/../Database/Migrations');
         $this->app->register(RouteServiceProvider::class);
-        $this->mergeConfigFrom(__DIR__ . '/../config.php', 'product');
+        $this->mergeConfigFrom(__DIR__ . '/../config.php', 'user');
     }
 }

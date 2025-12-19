@@ -3,7 +3,7 @@
 namespace Modules\Order\Providers;
 
 use Illuminate\Support\ServiceProvider;
-use Modules\Order\Interfaces\OrderInterface;
+//use Modules\Order\Interfaces\OrderInterface; if neeed to bind interface to implementation
 use Modules\Order\Service\OrderService;
 
 class OrderServiceProvider extends ServiceProvider
@@ -13,7 +13,8 @@ class OrderServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
-        $this->app->singleton(OrderInterface::class, fn() => new OrderService());
+        // if you need to bind interface to implementation
+        //$this->app->singleton(OrderInterface::class, fn() => new OrderService());
     }
 
     /**

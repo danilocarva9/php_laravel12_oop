@@ -2,7 +2,7 @@
 
 namespace Modules\Auth\Services;
 
-use App\Models\User;
+use Modules\User\Models\User;
 use Illuminate\Support\Facades\Hash;
 use Modules\Auth\Exceptions\FailedLoginException;
 use Modules\Customer\Models\Customer;

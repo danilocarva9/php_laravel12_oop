@@ -15,52 +15,58 @@ class CreateOrderAction
      * Create a new order.
      *
      * @param array $products
-     * @return OrderResource
+     * @return Order
      */
-    public function handle(array $order): OrderResource
+    public function handle(array $payload, int $customerId): Order
     {
-        $user = auth('sanctum')->user();
-
-        return DB::transaction(function () use ($order, $user) {
+        return DB::transaction(function () use ($payload, $customerId) {
 
             $totalAmount = 0;
             $items = [];
 
-            foreach ($order['products'] as $product) {
-                $productModel = Product::where('id', $product['id'])->select('id', 'price')->first();
+            $productsInput = collect($payload['products']);
 
-                if (!$productModel) {
-                    continue;
+            $products = Product::whereIn('id', $productsInput->pluck('id'))->select('id', 'price', 'stock')->get()->keyBy('id');
+
+            foreach ($productsInput as $productData) {
+
+                $product = $products->get($productData['id']);
+
+                if (!$product) {
+                    throw new \DomainException("Product with ID {$productData['id']} not found.");
                 }
 
-                $price = $productModel->price;
-                $quantity = $product['quantity'];
-                $totalAmount += $price * $quantity;
+                $product->reduceStock($productData['quantity']);
+
+                $quantity = $productData['quantity'];
+                $totalAmount += $product->price * $quantity;
 
                 $items[] = [
-                    'product_id' => $productModel->id,
+                    'product_id' => $product->id,
                     'quantity' => $quantity,
-                    'price' => $price,
+                    'price' => $product->price,
                 ];
             }
 
-            $order = new CreateOrderDTO($order['idempotency_key'], $user->customer->id, $totalAmount);
-            $order = Order::create($order->toArray());
+            $orderDTO = new CreateOrderDTO(
+                $payload['idempotency_key'],
+                $customerId,
+                $totalAmount
+            );
+
+            $order = Order::create($orderDTO->toArray());
 
             foreach ($items as $item) {
-
-                $itemDTO = new CreateOrderItemsDTO(
-                    $item['product_id'],
-                    $item['quantity'],
-                    $item['price']
+                $order->items()->create(
+                    (new CreateOrderItemsDTO(
+                        $item['product_id'],
+                        $item['quantity'],
+                        $item['price']
+                    ))->toArray()
                 );
-
-                $order->items()->create($itemDTO->toArray());
             }
 
-            return new OrderResource(
-                $order->load('items.product')
-            );
+            return $order->load('items.product');
         });
     }
 }

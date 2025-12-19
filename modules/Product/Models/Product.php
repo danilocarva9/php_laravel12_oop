@@ -28,4 +28,18 @@ class Product extends Model
     {
         return $this->hasMany(CartItem::class);
     }
+
+    public function isInStock(int $quantity): bool
+    {
+        return $this->stock >= $quantity;
+    }
+
+    public function reduceStock(int $quantity): void
+    {
+        if ($this->isInStock($quantity)) {
+            $this->decrement('stock', $quantity);
+        } else {
+            throw new \DomainException("Insufficient stock for product ID {$this->id}.");
+        }
+    }
 }
