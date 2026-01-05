@@ -49,7 +49,6 @@ class CreateOrderAction
             }
 
             $orderDTO = new CreateOrderDTO(
-                $payload['idempotency_key'],
                 $customerId,
                 $totalAmount
             );

@@ -47,7 +47,7 @@ class OrderService implements OrderInterface
                 ];
             }
 
-            $order = new CreateOrderDTO($order['idempotency_key'], $user->customer->id, $totalAmount);
+            $order = new CreateOrderDTO($user->customer->id, $totalAmount);
             $order = Order::create($order->toArray());
 
             foreach ($items as $item) {

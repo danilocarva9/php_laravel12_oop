@@ -25,7 +25,7 @@ class OrderCreateRequest extends FormRequest
             'products' => 'required|array|min:1',
             'products.*.id' => 'required|integer|exists:products,id',
             'products.*.quantity' => 'required|integer|min:1',
-            'idempotency_key' => 'required|string|max:255|unique:orders,idempotency_key',
+            'idempotency_key' => 'required|string|max:255',
         ];
     }
 

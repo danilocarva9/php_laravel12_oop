@@ -1,9 +1,8 @@
 <?php
 
-use PhpParser\Node\Expr\AssignOp\Mod;
-
 return [
     App\Providers\AppServiceProvider::class,
+    Modules\Core\Providers\CoreServiceProvider::class,
     Modules\User\Providers\UserServiceProvider::class,
     Modules\Auth\Providers\AuthServiceProvider::class,
     Modules\Order\Providers\OrderServiceProvider::class,
