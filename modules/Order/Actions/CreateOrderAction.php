@@ -11,6 +11,8 @@ use Modules\Product\Models\Product;
 
 class CreateOrderAction
 {
+
+    public function __construct(private CreatePaymentAction $createPaymentAction) {}
     /**
      * Create a new order.
      *
@@ -65,7 +67,7 @@ class CreateOrderAction
                 );
             }
 
-            (new CreatePaymentAction())->handle($order);
+            $this->createPaymentAction->handle($order);
 
             return $order->load('items.product');
         });
