@@ -5,8 +5,8 @@ namespace Modules\Order\Actions;
 use Illuminate\Support\Facades\DB;
 use Modules\Order\DTO\CreateOrderDTO;
 use Modules\Order\DTO\CreateOrderItemsDTO;
-use Modules\Order\Http\Resources\OrderResource;
 use Modules\Order\Models\Order;
+use Modules\Payment\Actions\CreatePaymentAction;
 use Modules\Product\Models\Product;
 
 class CreateOrderAction
@@ -64,6 +64,8 @@ class CreateOrderAction
                     ))->toArray()
                 );
             }
+
+            (new CreatePaymentAction())->handle($order);
 
             return $order->load('items.product');
         });

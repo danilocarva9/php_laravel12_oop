@@ -20,12 +20,4 @@ class OrderController extends Controller
         $order = $action->handle($request->validated(), auth('sanctum')->user()->customer->id);
         return new OrderResource($order);
     }
-
-    /**
-     * Service layer pattern.
-     */
-    // public function create(OrderCreateRequest $request): OrderResource
-    // {
-    //     return $this->order->create($request->validated());
-    // }
 }
