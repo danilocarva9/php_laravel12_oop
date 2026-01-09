@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Client\Request;
 use Modules\Payment\Actions\HandlePaymentWebhookAction;
 use Modules\Payment\Actions\ProcessPaymentAction;
+use Modules\Payment\Http\Requests\CallbackRequest;
 
 class PaymentController extends Controller
 {
@@ -14,7 +15,7 @@ class PaymentController extends Controller
         $action->handle($request->validated(), $orderId);
     }
 
-    public function callback(Request $request, HandlePaymentWebhookAction $action)
+    public function callback(CallbackRequest $request, HandlePaymentWebhookAction $action)
     {
         $action->handle($request->validated());
     }

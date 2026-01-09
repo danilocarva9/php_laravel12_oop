@@ -2,7 +2,6 @@
 
 namespace Modules\Payment\Providers;
 
-use Illuminate\Console\Scheduling\Event;
 use Illuminate\Support\ServiceProvider;
 
 class PaymentServiceProvider extends ServiceProvider
