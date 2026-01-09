@@ -48,6 +48,11 @@ class User extends Authenticatable
         ];
     }
 
+    protected static function newFactory()
+    {
+        return \Modules\User\Database\Factories\UserFactory::new();
+    }
+
     public function customer()
     {
         return $this->hasOne(Customer::class);

@@ -8,7 +8,4 @@ Route::group(['prefix' => 'order', 'middleware' => 'auth:sanctum'], function () 
     Route::get('{id}', [OrderController::class, 'show']);
     Route::post('/', [OrderController::class, 'create'])
         ->middleware('idempotency:' . IdempotencyOperationEnum::ORDER_CREATION->value);
-
-    Route::post('{id}/confirm', [OrderController::class, 'confirm']);
-    Route::post('{id}/cancel', [OrderController::class, 'cancel']);
 });

@@ -19,6 +19,11 @@ class Product extends Model
         'stock'
     ];
 
+    protected static function newFactory()
+    {
+        return \Modules\Product\Database\Factories\ProductFactory::new();
+    }
+
     public function orderItems()
     {
         return $this->hasMany(OrderItem::class);
