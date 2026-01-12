@@ -18,6 +18,7 @@ class PaymentServiceProvider extends ServiceProvider
     {
         $this->loadMigrationsFrom(__DIR__ . '/../Database/Migrations');
         $this->app->register(RouteServiceProvider::class);
+        $this->app->register(EventServiceProvider::class);
         $this->mergeConfigFrom(__DIR__ . '/../config.php', 'payment');
     }
 }

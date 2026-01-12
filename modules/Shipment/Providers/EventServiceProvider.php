@@ -4,6 +4,8 @@ namespace Modules\Shipment\Providers;
 
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\ServiceProvider;
+use Modules\Payment\Events\PaymentCompletedEvent;
+use Modules\Shipment\Listeners\CreateShipmentListener;
 
 class EventServiceProvider extends ServiceProvider
 {
@@ -13,8 +15,8 @@ class EventServiceProvider extends ServiceProvider
     public function boot(): void
     {
         Event::listen(
-            \Modules\Payment\Events\PaymentCompleted::class,
-            \Modules\Shipment\Listeners\CreateShipmentListener::class
+            PaymentCompletedEvent::class,
+            CreateShipmentListener::class
         );
     }
 }

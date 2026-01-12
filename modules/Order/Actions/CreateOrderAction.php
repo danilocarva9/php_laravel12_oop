@@ -5,6 +5,7 @@ namespace Modules\Order\Actions;
 use Illuminate\Support\Facades\DB;
 use Modules\Order\DTO\CreateOrderDTO;
 use Modules\Order\DTO\CreateOrderItemsDTO;
+use Modules\Order\Events\OrderCreatedEvent;
 use Modules\Order\Models\Order;
 use Modules\Payment\Actions\CreatePaymentAction;
 use Modules\Product\Models\Product;
@@ -67,7 +68,7 @@ class CreateOrderAction
                 );
             }
 
-            $this->createPaymentAction->handle($order);
+            OrderCreatedEvent::dispatch($order);
 
             return $order->load('items.product');
         });

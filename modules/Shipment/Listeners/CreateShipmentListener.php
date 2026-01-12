@@ -2,7 +2,7 @@
 
 namespace Modules\Shipment\Listeners;
 
-use Modules\Payment\Events\PaymentCompleted;
+use Modules\Payment\Events\PaymentCompletedEvent;
 use Modules\Shipment\Actions\CreateShipmentAction;
 
 class CreateShipmentListener
@@ -14,7 +14,7 @@ class CreateShipmentListener
     /**
      * Handle the event.
      */
-    public function handle(PaymentCompleted $event): void
+    public function handle(PaymentCompletedEvent $event): void
     {
         $this->action->handle($event->order);
     }

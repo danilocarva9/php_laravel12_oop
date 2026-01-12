@@ -8,7 +8,7 @@ use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
 use Modules\Order\Models\Order;
 
-class PaymentCompleted implements ShouldDispatchAfterCommit
+class PaymentCompletedEvent implements ShouldDispatchAfterCommit
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 

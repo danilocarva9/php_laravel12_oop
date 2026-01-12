@@ -1,11 +1,11 @@
 <?php
 
-namespace Modules\User\Providers;
+namespace Modules\Payment\Providers;
 
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\ServiceProvider;
-use Modules\Payment\Events\PaymentCompletedEvent;
-use Modules\User\Listeners\SendUserPaymentSucceededNotificationListener;
+use Modules\Order\Events\OrderCreatedEvent;
+use Modules\Payment\Listeners\CreatePaymentListener;
 
 class EventServiceProvider extends ServiceProvider
 {
@@ -15,8 +15,8 @@ class EventServiceProvider extends ServiceProvider
     public function boot(): void
     {
         Event::listen(
-            PaymentCompletedEvent::class,
-            SendUserPaymentSucceededNotificationListener::class
+            OrderCreatedEvent::class,
+            CreatePaymentListener::class
         );
     }
 }
