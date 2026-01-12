@@ -1,8 +1,8 @@
-
 <?php
 
 namespace App\Services\Redis;
 
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Redis;
 
 class RedisService
@@ -15,13 +15,9 @@ class RedisService
      * @param int|null $expire
      * @return void
      */
-    public function set(string $key, $value, int $expire = null): void
+    public function set(string $key, $value, ?int $expire = null): void
     {
-        if ($expire) {
-            Redis::setex($key, $expire, $value);
-        } else {
-            Redis::set($key, $value);
-        }
+        Cache::put($key, $value, $expire);
     }
 
     /**
@@ -30,9 +26,9 @@ class RedisService
      * @param string $key
      * @return mixed
      */
-    public function get(string $key)
+    public static function get(string $key)
     {
-        return Redis::get($key);
+        return Cache::get($key);
     }
 
     /**
@@ -43,6 +39,6 @@ class RedisService
      */
     public function delete(string $key): void
     {
-        Redis::del($key);
+        Cache::forget($key);
     }
 }
