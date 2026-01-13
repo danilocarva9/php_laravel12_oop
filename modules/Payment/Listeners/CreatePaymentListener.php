@@ -3,7 +3,6 @@
 namespace Modules\Payment\Listeners;
 
 use Modules\Order\Events\OrderCreatedEvent;
-use Modules\Order\Models\Order;
 use Modules\Payment\Actions\CreatePaymentAction;
 
 class CreatePaymentListener

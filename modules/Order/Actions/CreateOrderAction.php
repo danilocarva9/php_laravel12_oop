@@ -3,6 +3,7 @@
 namespace Modules\Order\Actions;
 
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Modules\Order\DTO\CreateOrderDTO;
 use Modules\Order\DTO\CreateOrderItemsDTO;
 use Modules\Order\Events\OrderCreatedEvent;
@@ -67,6 +68,9 @@ class CreateOrderAction
                     ))->toArray()
                 );
             }
+
+            // only example of logging
+            Log::info('Creating order', ['order_id' => $order->id, 'amount' => $totalAmount]);
 
             OrderCreatedEvent::dispatch($order);
 
