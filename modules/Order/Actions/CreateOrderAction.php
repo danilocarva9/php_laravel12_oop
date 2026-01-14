@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Log;
 use Modules\Order\DTO\CreateOrderDTO;
 use Modules\Order\DTO\CreateOrderItemsDTO;
 use Modules\Order\Events\OrderCreatedEvent;
+use Modules\Order\Jobs\CreateOrderJob;
 use Modules\Order\Models\Order;
 use Modules\Payment\Actions\CreatePaymentAction;
 use Modules\Product\Models\Product;
@@ -72,7 +73,17 @@ class CreateOrderAction
             // only example of logging
             Log::info('Creating order', ['order_id' => $order->id, 'amount' => $totalAmount]);
 
-            OrderCreatedEvent::dispatch($order);
+            // Use [Events] when you want to broadcast that something has happened in your application,
+            // allowing multiple listeners to react to the event. Events are useful for decoupling logic,
+            // but are typically synchronous unless listeners themselves dispatch jobs.
+
+            // OrderCreatedEvent::dispatch($order);
+
+            // Use [Jobs] when you need to handle time-consuming or resource-intensive tasks asynchronously,
+            // such as sending emails, processing payments, or updating external systems.
+            // Jobs are queued and processed in the background, improving application responsiveness.
+
+            CreateOrderJob::dispatch($order);
 
             return $order->load('items.product');
         });

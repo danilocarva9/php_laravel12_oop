@@ -102,6 +102,52 @@ docker exec -it laravel_app php artisan test --filter=CreateOrderActionTest
 
 ## 🛠️ Common Commands
 
+Dealing with laravel jobs:
+
+processes jobs continuously:
+
+```bash
+php artisan queue:work
+```
+
+```bash
+php artisan queue:work --tries=3
+php artisan queue:work --timeout=90
+php artisan queue:work --queue=emails
+php artisan queue:work --sleep=3
+```
+
+for list failed jobs:
+
+```bash
+php artisan queue:failed
+```
+
+to retry all failed jobs:
+
+```bash
+php artisan queue:retry all
+php artisan queue:retry 5
+```
+
+to delete failed job
+
+```bash
+php artisan queue:forget 5
+```
+
+delete all failed jobs:
+
+```bash
+php artisan queue:flush
+```
+
+delete pending jobs:
+
+```bash
+php artisan queue:clear
+```
+
 Stop containers:
 
 ```bash
