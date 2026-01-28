@@ -5,6 +5,7 @@ namespace Modules\Shipment\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Modules\Order\Models\Order;
+use Modules\Shipment\Enums\ShipmentStatusEnum;
 
 class Shipment extends Model
 {
@@ -15,6 +16,7 @@ class Shipment extends Model
         'order_id',
         'tracking_number',
         'carrier',
+        'status',
         'shipped_at',
         'delivered_at',
     ];
@@ -22,6 +24,10 @@ class Shipment extends Model
     protected $dates = [
         'shipped_at',
         'delivered_at',
+    ];
+
+    protected $cast = [
+        'status' => ShipmentStatusEnum::class
     ];
 
     public function order()

@@ -4,6 +4,7 @@ namespace Modules\Payment\Actions;
 
 use Illuminate\Support\Facades\DB;
 use Modules\Order\Models\Order;
+use Modules\Payment\Enums\PaymentStatusEnum;
 use Modules\Payment\Models\Payment;
 
 class CreatePaymentAction
@@ -22,7 +23,7 @@ class CreatePaymentAction
                 'order_id' => $order->id,
                 'payment_method' => 'PENDING',
                 'amount' => $order->total_amount,
-                'status' => 'PENDING',
+                'status' => PaymentStatusEnum::class::UNPAID,
             ]);
         });
     }

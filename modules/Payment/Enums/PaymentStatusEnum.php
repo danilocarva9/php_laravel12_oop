@@ -8,9 +8,4 @@ enum PaymentStatusEnum: string
 {
     case UNPAID = 'UNPAID';
     case PAID = 'PAID';
-
-    public function label(): string
-    {
-        return Str::headLine($this->value);
-    }
 }

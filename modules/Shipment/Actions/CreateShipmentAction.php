@@ -4,6 +4,7 @@ namespace Modules\Shipment\Actions;
 
 use Illuminate\Support\Facades\DB;
 use Modules\Order\Models\Order;
+use Modules\Shipment\Enums\ShipmentStatusEnum;
 use Modules\Shipment\Models\Shipment;
 
 class CreateShipmentAction
@@ -21,7 +22,7 @@ class CreateShipmentAction
                 'order_id' => $order->id,
                 'tracking_number' => 'TRK' . strtoupper(uniqid()),
                 'carrier' => 'Default Carrier',
-                'shipped_at' => now(),
+                'status' => ShipmentStatusEnum::PENDING,
             ]);
         });
     }

@@ -22,8 +22,10 @@ class CreateOrderAction
      * @param array $products
      * @return Order
      */
-    public function handle(array $payload, int $customerId): Order
+    public function handle(array $payload): Order
     {
+        $customerId = auth('sanctum')->user()->customer->id;
+
         return DB::transaction(function () use ($payload, $customerId) {
 
             $totalAmount = 0;

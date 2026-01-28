@@ -15,8 +15,9 @@ return new class extends Migration
             $table->id();
             $table->foreignId('order_id')->constrained()->onUpdate('cascade')->onDelete('cascade')->index('shipments_order_id');
             $table->string('tracking_number')->unique();
-            $table->string('carrier');
-            $table->date('shipped_at');
+            $table->string('carrier')->nullable();
+            $table->string('status');
+            $table->date('shipped_at')->nullable();
             $table->date('delivered_at')->nullable();
             $table->timestamps();
         });

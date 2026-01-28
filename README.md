@@ -76,6 +76,12 @@ The following commands are **optional** and only needed if you want to enable sp
 docker exec -it laravel_app php artisan migrate
 ```
 
+### Run migrations recreating all tables
+
+```bash
+docker exec -it laravel_app php artisan migrate:refresh
+```
+
 ### Seed the database
 
 ```bash
@@ -107,45 +113,45 @@ Dealing with laravel jobs:
 processes jobs continuously:
 
 ```bash
-php artisan queue:work
+docker exec -it laravel_app php artisan queue:work
 ```
 
 ```bash
-php artisan queue:work --tries=3
-php artisan queue:work --timeout=90
-php artisan queue:work --queue=emails
-php artisan queue:work --sleep=3
+docker exec -it laravel_app php artisan queue:work --tries=3
+docker exec -it laravel_app php artisan queue:work --timeout=90
+docker exec -it laravel_app php artisan queue:work --queue=emails
+docker exec -it laravel_app php artisan queue:work --sleep=3
 ```
 
 for list failed jobs:
 
 ```bash
-php artisan queue:failed
+docker exec -it laravel_app php artisan queue:failed
 ```
 
 to retry all failed jobs:
 
 ```bash
-php artisan queue:retry all
-php artisan queue:retry 5
+docker exec -it laravel_app php artisan queue:retry all
+docker exec -it laravel_app php artisan queue:retry 5
 ```
 
 to delete failed job
 
 ```bash
-php artisan queue:forget 5
+docker exec -it laravel_app php artisan queue:forget 5
 ```
 
 delete all failed jobs:
 
 ```bash
-php artisan queue:flush
+docker exec -it laravel_app php artisan queue:flush
 ```
 
 delete pending jobs:
 
 ```bash
-php artisan queue:clear
+docker exec -it laravel_app php artisan queue:clear
 ```
 
 Stop containers:

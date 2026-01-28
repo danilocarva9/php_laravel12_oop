@@ -10,9 +10,4 @@ enum OrderStatusEnum: string
     case PROCESSING = 'PROCESSING';
     case COMPLETED = 'COMPLETED';
     case CANCELLED = 'CANCELLED';
-
-    public function label(): string
-    {
-        return Str::headLine($this->value);
-    }
 }

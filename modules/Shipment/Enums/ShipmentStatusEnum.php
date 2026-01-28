@@ -2,8 +2,6 @@
 
 namespace Modules\Shipment\Enums;
 
-use Illuminate\Support\Str;
-
 enum ShipmentStatusEnum: string
 {
     case PENDING = 'PENDING'; // awaiting processing
@@ -16,9 +14,4 @@ enum ShipmentStatusEnum: string
     case FAILED = 'FAILED'; // delivery attempt failed
     case RETURNED = 'RETURNED'; // item returned by customer
     case CANCELLED = 'CANCELLED'; // shipping called before dispatch
-
-    public function label(): string
-    {
-        return Str::headLine($this->value);
-    }
 }
