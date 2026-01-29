@@ -2,6 +2,8 @@
 
 This is a **Laravel 12** application designed to run fully containerized using **Docker Compose**. The setup includes multiple services (such as the Laravel app, database, cache, etc.) and provides a straightforward workflow to get the project up and running locally.
 
+-   Uses Sanctum for Authentication
+
 ---
 
 ## 🧰 Requirements
@@ -67,6 +69,14 @@ The following commands are **optional** and only needed if you want to enable sp
 > Uncomment and run these commands only if your project requires authentication scaffolding or Redis support.
 
 ---
+
+## App Reset for local/development env
+
+COMMAND:
+
+```bash
+docker exec -it laravel_app php artisan dev:reset
+```
 
 ## 🗄️ Database Setup
 

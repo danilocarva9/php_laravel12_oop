@@ -4,24 +4,24 @@ namespace Modules\Auth\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Modules\Auth\Actions\LoginAction;
+use Modules\Auth\Actions\LogoutAction;
+use Modules\Auth\Actions\RegisterAction;
 use Modules\Auth\Http\Requests\AuthLoginRequest;
 use Modules\Auth\Http\Requests\AuthRegisterRequest;
-use Modules\Auth\Services\AuthService;
 
 class AuthController extends Controller
 {
 
-    public function __construct(private AuthService $authService) {}
-
-    public function register(AuthRegisterRequest $request)
+    public function register(AuthRegisterRequest $request, RegisterAction $registerAction)
     {
-        $this->authService->register($request->validated());
+        $registerAction->handle($request->validated());
         return response()->json(['message' => 'Registration successful']);
     }
 
-    public function login(AuthLoginRequest $request)
+    public function login(AuthLoginRequest $request, LoginAction $loginAction)
     {
-        $token = $this->authService->login($request->validated());
+        $token = $loginAction->handle($request->validated());
 
         return response()->json([
             'access_token' => $token,
@@ -29,9 +29,9 @@ class AuthController extends Controller
         ]);
     }
 
-    public function logout(Request $request)
+    public function logout(Request $request, LogoutAction $logoutAction)
     {
-        $this->authService->logout($request);
+        $logoutAction->handle($request);
         return response()->json(['message' => 'Logout successful']);
     }
 }
