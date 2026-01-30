@@ -1,17 +1,22 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Modules\Order\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Modules\Order\Enums\OrderStatusEnum;
-use Modules\Payment\Enums\PaymentStatusEnum;
 use Modules\Payment\Models\Payment;
 use Modules\Shipment\Models\Shipment;
 
-class Order extends Model
+/**
+ * @property-read string $customer_id
+ * @property-read OrderStatusEnum $status
+ * @property-read float $total_amount
+ */
+final class Order extends Model
 {
-
     use HasFactory;
 
     protected $fillable = [
@@ -30,9 +35,9 @@ class Order extends Model
         return $this->hasMany(OrderItem::class);
     }
 
-    public function payments()
+    public function payment()
     {
-        return $this->hasMany(Payment::class);
+        return $this->hasOne(Payment::class);
     }
 
     public function shipments()
@@ -55,7 +60,7 @@ class Order extends Model
      *
      * @throws \DomainException if the order is already completed.
      */
-    public function marAsComplete(): void
+    public function markAsComplete(): void
     {
         if (!$this->isInProgress()) {
             throw new \DomainException('Order is already completed.');

@@ -17,7 +17,7 @@ class OrderResource extends JsonResource
         return [
             'id'            => $this->id,
             'status'        => $this->status,
-            'total_amount'  => $this->total_amount,
+            'total_amount'  => optional($this->payment)?->getTotalAmount(),
             'items' => OrderItemResource::collection($this->items),
         ];
     }

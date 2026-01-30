@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Modules\Payment\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -7,7 +9,14 @@ use Illuminate\Database\Eloquent\Model;
 use Modules\Order\Models\Order;
 use Modules\Payment\Enums\PaymentStatusEnum;
 
-class Payment extends Model
+/**
+ * @property-read string $transaction_id
+ * @property-read int $order_id
+ * @property-read string $payment_method
+ * @property-read int $amount
+ * @property-read PaymentStatusEnum $status
+ */
+final class Payment extends Model
 {
 
     use HasFactory;
@@ -23,7 +32,7 @@ class Payment extends Model
     public function casts(): array
     {
         return [
-            'amount' => 'decimal:2',
+            'amount' => 'integer',
             'status' => PaymentStatusEnum::class,
         ];
     }
@@ -55,5 +64,10 @@ class Payment extends Model
         }
 
         $this->update(['status' => PaymentStatusEnum::PAID, 'updated_at' => now()]);
+    }
+
+    public function getTotalAmount(): float
+    {
+        return $this->amount / 100;
     }
 }

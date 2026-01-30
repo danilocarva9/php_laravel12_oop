@@ -2,12 +2,13 @@
 
 namespace Modules\Order\Jobs;
 
+use Illuminate\Contracts\Events\ShouldDispatchAfterCommit;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Queue\Queueable;
 use Modules\Order\Models\Order;
 use Modules\Payment\Actions\CreatePaymentAction;
 
-class CreateOrderJob implements ShouldQueue
+class CreateOrderJob implements ShouldQueue, ShouldDispatchAfterCommit
 {
     use Queueable;
 

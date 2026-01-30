@@ -2,12 +2,22 @@
 
 namespace Modules\Shipment\Models;
 
+declare(strict_types=1);
+
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Modules\Order\Models\Order;
 use Modules\Shipment\Enums\ShipmentStatusEnum;
 
-class Shipment extends Model
+/**
+ * @property-read int $order_id
+ * @property-read string $tracking_number
+ * @property-read string|null $carrier
+ * @property-read ShipmentStatusEnum $status
+ * @property-read \DateTime|null $shipped_at
+ * @property-read \DateTime|null $delivered_at
+ */
+final class Shipment extends Model
 {
 
     use HasFactory;

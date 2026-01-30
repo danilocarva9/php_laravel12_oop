@@ -16,7 +16,7 @@ return new class extends Migration
             $table->string('name');
             $table->text('description')->nullable();
             $table->string('sku')->unique();
-            $table->decimal('price', 10, 2);
+            $table->unsignedBigInteger('price'); //price in cents
             $table->integer('stock')->default(0);
             $table->timestamps();
         });

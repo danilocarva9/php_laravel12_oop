@@ -3,6 +3,7 @@
 namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
+use Modules\Product\Models\Product;
 
 class DevReset extends Command
 {

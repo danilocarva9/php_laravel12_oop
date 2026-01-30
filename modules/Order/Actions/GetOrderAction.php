@@ -29,7 +29,7 @@ class GetOrderAction
         }
 
         return new OrderResource(
-            $order->load('items.product')
+            $order->load('items.product', 'payment')
         );
     }
 }

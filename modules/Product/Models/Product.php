@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Modules\Product\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -7,7 +9,14 @@ use Illuminate\Database\Eloquent\Model;
 use Modules\Cart\Models\CartItem;
 use Modules\Order\Models\OrderItem;
 
-class Product extends Model
+/**
+ * @property-read string $name
+ * @property-read string|null $description
+ * @property-read string $sku
+ * @property-read int $price
+ * @property-read int $stock
+ */
+final class Product extends Model
 {
     use HasFactory;
 
@@ -15,8 +24,13 @@ class Product extends Model
         'name',
         'description',
         'sku',
-        'price',
+        'price', //currently in integer cents pennies to avoid float precision issues
         'stock'
+    ];
+
+    protected $casts = [
+        'price' => 'integer',
+        'stock' => 'integer'
     ];
 
     protected static function newFactory()
@@ -41,10 +55,15 @@ class Product extends Model
 
     public function reduceStock(int $quantity): void
     {
-        if ($this->isInStock($quantity)) {
-            $this->decrement('stock', $quantity);
-        } else {
-            throw new \DomainException("Insufficient stock for product ID {$this->id}.");
+        if (!$this->isInStock($quantity)) {
+            throw new \DomainException("Insufficient stock for product ID {$this->name}.");
         }
+
+        $this->decrement('stock', $quantity);
+    }
+
+    public function getPrice(): int
+    {
+        return $this->price;
     }
 }

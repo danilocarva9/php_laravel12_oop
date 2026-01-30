@@ -40,7 +40,7 @@ class ProductFactory extends Factory
             'name' => "{$brand} {$name} {$modelNumber}",
             'description' => fake()->sentence(),
             'sku' => fake()->unique()->ean8(),
-            'price' => fake()->randomFloat(2, 10, 500),
+            'price' => fake()->numberBetween(100, 800), //price in cents
             'stock' => fake()->numberBetween(0, 100),
         ];
     }

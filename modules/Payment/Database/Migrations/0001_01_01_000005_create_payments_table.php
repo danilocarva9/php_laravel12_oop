@@ -16,7 +16,7 @@ return new class extends Migration
             $table->string('transaction_id')->unique();
             $table->foreignId('order_id')->constrained()->onUpdate('cascade')->onDelete('cascade')->index('payments_order_id');
             $table->string('payment_method');
-            $table->decimal('amount', 10, 2);
+            $table->unsignedBigInteger('amount'); //amount in cents
             $table->string('status');
             $table->timestamps();
         });
