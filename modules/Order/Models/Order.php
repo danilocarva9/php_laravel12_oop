@@ -8,11 +8,10 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
 use Modules\Customer\Models\Customer;
+use Modules\Order\Domain\Item;
+use Modules\Order\Domain\Items;
 use Modules\Order\Enums\OrderStatusEnum;
 use Modules\Order\Models\Traits\OrderRelationship;
-use Modules\Payment\Models\Payment;
-use Modules\Product\Models\Product;
-use Modules\Shipment\Models\Shipment;
 
 /**
  * @property-read string $customer_id
@@ -90,10 +89,10 @@ final class Order extends Model
      * Place a new order for the given customer with specified items.
      *
      * @param Customer $customer
-     * @param array $items
-     * @return Order
+     * @param Items $items
+     * @return self
      */
-    public static function place(Customer $customer, array $items): Order
+    public static function place(Customer $customer, Items $items): self
     {
         return DB::transaction(function () use ($customer, $items) {
             $order = self::create([
@@ -101,15 +100,26 @@ final class Order extends Model
                 'status' => OrderStatusEnum::PENDING,
             ]);
 
-            $items = collect($items)->map(fn($product) => [
-                'product_id' => $product['id'],
-                'quantity'   => $product['quantity'],
-                'price'      => Product::findOrFail($product['id'])->getPrice(),
-            ]);
-
-            $order->items()->createMany($items->toArray());
+            foreach ($items->items as $item) {
+                $order->addItem($item);
+            }
 
             return $order;
         });
+    }
+
+    /**
+     * Add items to order
+     *
+     * @param Item $item
+     * @return void
+     */
+    private function addItem(Item $item): void
+    {
+        $this->items()->save(new OrderItem([
+            'product_id' => $item->product->id,
+            'quantity' => $item->quantity,
+            'price' => $item->product->price
+        ]));
     }
 }
