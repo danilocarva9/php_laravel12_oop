@@ -17,7 +17,10 @@ class OrderController extends Controller
 
     public function create(OrderCreateRequest $request, CreateOrderAction $action): OrderResource
     {
-        $order = $action->handle($request->validated());
+        $order = $action->handle(
+            auth('sanctum')->user()->customer,
+            $request->array('products')
+        );
         return new OrderResource($order);
     }
 }
