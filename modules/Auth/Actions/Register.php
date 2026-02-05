@@ -6,7 +6,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Modules\User\Models\User;
 
-class RegisterAction
+class Register
 {
     /**
      * Handle user registration.
@@ -20,7 +20,7 @@ class RegisterAction
             $user = User::create([
                 'name' => $payload['name'],
                 'email' => $payload['email'],
-                'password' => Hash::make($payload['password']),
+                'password' => $payload['password'],
             ]);
 
             $user->customer()->firstOrCreate([

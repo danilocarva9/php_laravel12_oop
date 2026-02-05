@@ -6,7 +6,7 @@ use Illuminate\Support\Facades\Hash;
 use Modules\Auth\Exceptions\FailedLoginException;
 use Modules\User\Models\User;
 
-class LoginAction
+class Login
 {
     /**
      * Handle user login and return an authentication token.

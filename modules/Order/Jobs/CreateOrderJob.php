@@ -6,7 +6,7 @@ use Illuminate\Contracts\Events\ShouldDispatchAfterCommit;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Queue\Queueable;
 use Modules\Order\Models\Order;
-use Modules\Payment\Actions\CreatePaymentAction;
+use Modules\Payment\Actions\CreatePayment;
 
 class CreateOrderJob implements ShouldQueue, ShouldDispatchAfterCommit
 {
@@ -27,7 +27,7 @@ class CreateOrderJob implements ShouldQueue, ShouldDispatchAfterCommit
     /**
      * Execute the job.
      */
-    public function handle(CreatePaymentAction $action): void
+    public function handle(CreatePayment $action): void
     {
         $action->handle($this->order);
     }

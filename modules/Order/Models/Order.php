@@ -94,18 +94,16 @@ final class Order extends Model
      */
     public static function place(Customer $customer, Items $items): self
     {
-        return DB::transaction(function () use ($customer, $items) {
-            $order = self::create([
-                'customer_id' => $customer->id,
-                'status' => OrderStatusEnum::PENDING,
-            ]);
+        $order = self::create([
+            'customer_id' => $customer->id,
+            'status' => OrderStatusEnum::PENDING,
+        ]);
 
-            foreach ($items->items as $item) {
-                $order->addItem($item);
-            }
+        foreach ($items->items as $item) {
+            $order->addItem($item);
+        }
 
-            return $order;
-        });
+        return $order;
     }
 
     /**
@@ -116,10 +114,27 @@ final class Order extends Model
      */
     private function addItem(Item $item): void
     {
+        if (!$item->product->isInStock($item->quantity)) {
+            throw new \DomainException('Some products are out of stock.');
+        }
+
         $this->items()->save(new OrderItem([
             'product_id' => $item->product->id,
             'quantity' => $item->quantity,
             'price' => $item->product->price
         ]));
+    }
+
+    /**
+     * Calculate the total amount for the order items.
+     *
+     * @return integer
+     */
+    public function calculateTotal(): int
+    {
+        return $this->items->sum(
+            fn($item) =>
+            $item->price * $item->quantity
+        );
     }
 }

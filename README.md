@@ -1,5 +1,9 @@
 # Laravel 12 Application (Dockerized)
 
+Quick Note:
+Models decide what is allowed.
+Actions / Services decide what happens. / Orchestration
+
 This is a **Laravel 12** application designed to run fully containerized using **Docker Compose**. The setup includes multiple services (such as the Laravel app, database, cache, etc.) and provides a straightforward workflow to get the project up and running locally.
 
 -   Uses Sanctum for Authentication
@@ -111,7 +115,7 @@ docker exec -it laravel_app php artisan test
 ### Run a specific test
 
 ```bash
-docker exec -it laravel_app php artisan test --filter=CreateOrderActionTest
+docker exec -it laravel_app php artisan test --filter=PlaceOrderTest
 ```
 
 ---

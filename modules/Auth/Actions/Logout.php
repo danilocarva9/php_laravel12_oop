@@ -2,7 +2,7 @@
 
 namespace Modules\Auth\Actions;
 
-class LogoutAction
+class Logout
 {
     /**
      * Handle user logout by deleting the current access token.
