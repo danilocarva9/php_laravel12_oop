@@ -11,7 +11,8 @@ use Modules\Customer\Models\Customer;
 use Modules\Order\Domain\Item;
 use Modules\Order\Domain\Items;
 use Modules\Order\Enums\OrderStatusEnum;
-use Modules\Order\Models\Traits\OrderRelationship;
+use Modules\Payment\Models\Payment;
+use Modules\Shipment\Models\Shipment;
 
 /**
  * @property-read string $customer_id
@@ -19,7 +20,7 @@ use Modules\Order\Models\Traits\OrderRelationship;
  */
 final class Order extends Model
 {
-    use HasFactory, OrderRelationship;
+    use HasFactory;
 
     protected $fillable = [
         'customer_id',
@@ -30,6 +31,21 @@ final class Order extends Model
         'total_amount' => 'decimal:2',
         'status'       => OrderStatusEnum::class
     ];
+
+    public function items()
+    {
+        return $this->hasMany(OrderItem::class);
+    }
+
+    public function payment()
+    {
+        return $this->hasOne(Payment::class);
+    }
+
+    public function shipment()
+    {
+        return $this->hasOne(Shipment::class);
+    }
 
     /**
      * Check if the order is still in progress.

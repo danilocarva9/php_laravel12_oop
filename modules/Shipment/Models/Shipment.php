@@ -1,9 +1,10 @@
 <?php
 
-namespace Modules\Shipment\Models;
-
 declare(strict_types=1);
 
+namespace Modules\Shipment\Models;
+
+use DomainException;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Modules\Order\Models\Order;
@@ -43,5 +44,45 @@ final class Shipment extends Model
     public function order()
     {
         return $this->belongsTo(Order::class);
+    }
+
+    public static function createShipment(Order $order)
+    {
+        $order->shipment()->create([
+            'tracking_number' => self::generateTrackingNumber(),
+            'carrier' => 'Default Carrier',
+            'status' => ShipmentStatusEnum::PENDING,
+        ]);
+    }
+
+    private static function generateTrackingNumber(): string
+    {
+        return 'TRK' . strtoupper(uniqid());
+    }
+
+    public function markAsShipped(): void
+    {
+        if ($this->status !== ShipmentStatusEnum::PENDING) {
+            throw new DomainException('Order cannot be shipped.');
+        }
+
+        $this->changeStatusTo(ShipmentStatusEnum::SHIPPED);
+    }
+
+    public function markAsDelivered(): void
+    {
+        if ($this->status !== ShipmentStatusEnum::FAILED) {
+            throw new DomainException('A failed shipment cant be delivered.');
+        }
+
+        $this->changeStatusTo(ShipmentStatusEnum::DELIVERED);
+    }
+
+    private function changeStatusTo(ShipmentStatusEnum $status): void
+    {
+        $this->update([
+            'status' => $status,
+            'updated_at' => now()
+        ]);
     }
 }

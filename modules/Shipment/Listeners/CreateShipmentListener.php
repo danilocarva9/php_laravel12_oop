@@ -3,11 +3,11 @@
 namespace Modules\Shipment\Listeners;
 
 use Modules\Payment\Events\PaymentCompletedEvent;
-use Modules\Shipment\Actions\CreateShipmentAction;
+use Modules\Shipment\Actions\CreateShipment;
 
 class CreateShipmentListener
 {
-    public function __construct(private CreateShipmentAction $action)
+    public function __construct(private CreateShipment $action)
     {
         //
     }

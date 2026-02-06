@@ -3,12 +3,10 @@
 namespace Modules\Payment\Actions;
 
 use Illuminate\Support\Facades\DB;
-use Modules\Order\Models\Order;
-use Modules\Payment\Events\PaymentCompleted;
 use Modules\Payment\Events\PaymentCompletedEvent;
 use Modules\Payment\Models\Payment;
 
-class ConfirmPaymentSucceededAction
+class ConfirmPaymentSucceeded
 {
     /**
      * Confirm that the payment has succeeded.
@@ -18,13 +16,9 @@ class ConfirmPaymentSucceededAction
      */
     public function handle(array $payload): void
     {
-        $order = DB::transaction(function () use ($payload) {
+        DB::transaction(function () use ($payload) {
             $payment = Payment::where('transaction_id', $payload['transaction_id'])->firstOrFail();
             $payment->markAsPaid();
-
-            return $payment->order;
         });
-
-        event(new PaymentCompletedEvent($order));
     }
 }

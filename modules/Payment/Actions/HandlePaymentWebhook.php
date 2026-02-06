@@ -2,7 +2,7 @@
 
 namespace Modules\Payment\Actions;
 
-class HandlePaymentWebhookAction
+class HandlePaymentWebhook
 {
     /**
      * Process payment for an order.
@@ -13,7 +13,7 @@ class HandlePaymentWebhookAction
     public function handle(array $payload): void
     {
         match ($payload['status']) {
-            'success' => (new ConfirmPaymentSucceededAction())->handle($payload),
+            'success' => (new ConfirmPaymentSucceeded())->handle($payload),
             'failure' => (new ConfirmPaymentFailedAction())->handle($payload),
             default => null,
         };

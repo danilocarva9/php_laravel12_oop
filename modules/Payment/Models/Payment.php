@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Modules\Order\Models\Order;
 use Modules\Payment\Enums\PaymentStatusEnum;
+use Modules\Payment\Events\PaymentCompletedEvent;
 
 /**
  * @property-read string $transaction_id
@@ -55,6 +56,9 @@ final class Payment extends Model
     /**
      * Mark the payment as paid.
      *
+     * Domain event:
+     * - Dispatches {@see \Modules\Payment\Events\PaymentCompletedEvent} after commit.
+     *
      * @return void
      */
     public function markAsPaid(): void
@@ -64,6 +68,8 @@ final class Payment extends Model
         }
 
         $this->update(['status' => PaymentStatusEnum::PAID, 'updated_at' => now()]);
+
+        PaymentCompletedEvent::dispatch($this->order);
     }
 
     public function getTotalAmount(): float
