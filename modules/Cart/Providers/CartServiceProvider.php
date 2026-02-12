@@ -2,6 +2,7 @@
 
 namespace Modules\Cart\Providers;
 
+use Illuminate\Support\Facades\Route;
 use Illuminate\Support\ServiceProvider;
 use Modules\Cart\Interfaces\CartInterface;
 use Modules\Cart\Service\CartService;
@@ -15,6 +16,7 @@ class CartServiceProvider extends ServiceProvider
     public function register(): void
     {
         $this->app->singleton(CartInterface::class, fn() => new CartService());
+        $this->mergeConfigFrom(__DIR__ . '/../config.php', 'cart');
     }
 
     /**
@@ -23,7 +25,5 @@ class CartServiceProvider extends ServiceProvider
     public function boot(): void
     {
         $this->loadMigrationsFrom(__DIR__ . '/../Database/Migrations');
-        $this->app->register(RouteServiceProvider::class);  //$this->loadRoutesFrom(__DIR__ . '/../routes.php');
-        $this->mergeConfigFrom(__DIR__ . '/../config.php', 'cart');
     }
 }

@@ -3,6 +3,7 @@
 namespace Modules\Product\Providers;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
+use Illuminate\Support\Facades\Route;
 use Illuminate\Support\ServiceProvider;
 
 class ProductServiceProvider extends ServiceProvider
@@ -15,6 +16,7 @@ class ProductServiceProvider extends ServiceProvider
         // Factory::guessFactoryNamesUsing(
         //     fn(string $modelName) => 'Modules\\Product\\Database\\Factories\\' . class_basename($modelName) . 'Factory'
         // );
+        $this->mergeConfigFrom(__DIR__ . '/../config.php', 'product');
     }
 
     /**
@@ -23,7 +25,5 @@ class ProductServiceProvider extends ServiceProvider
     public function boot(): void
     {
         $this->loadMigrationsFrom(__DIR__ . '/../Database/Migrations');
-        $this->app->register(RouteServiceProvider::class);
-        $this->mergeConfigFrom(__DIR__ . '/../config.php', 'product');
     }
 }

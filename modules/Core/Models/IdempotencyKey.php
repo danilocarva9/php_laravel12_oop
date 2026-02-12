@@ -19,7 +19,7 @@ class IdempotencyKey extends Model
         'expires_at'
     ];
 
-    protected $cast = [
+    protected $casts = [
         'operation' => IdempotencyOperationEnum::class,
         'response' => 'array',
         'expires_at' => 'datetime'

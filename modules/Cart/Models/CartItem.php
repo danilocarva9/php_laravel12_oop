@@ -1,8 +1,8 @@
 <?php
 
-namespace Modules\Cart\Models;
-
 declare(strict_types=1);
+
+namespace Modules\Cart\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -28,7 +28,7 @@ final class CartItem extends Model
         'price'
     ];
 
-    protected $cast = [
+    protected $casts = [
         'quantity' => 'integer',
         'price' => 'integer',
     ];

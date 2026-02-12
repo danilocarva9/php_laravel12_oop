@@ -3,7 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use Modules\Auth\Http\Controllers\AuthController;
 
-Route::group(['prefix' => 'auth'], function () {
+Route::group(['middleware' => 'ip.throttle', 'prefix' => 'auth'], function () {
     Route::post('/register', [AuthController::class, 'register']);
     Route::post('/login', [AuthController::class, 'login']);
 

@@ -34,6 +34,9 @@ class PlaceOrder
         // CreateOrderJob::dispatch($order);
         Log::info("Order {$order->id} created for customer {$customer->id}.");
 
+        //Eager loads items/products and payment
+        $order->load(['items.product', 'payment']);
+
         return $order;
     }
 }

@@ -6,6 +6,7 @@ enum ShipmentStatusEnum: string
 {
     case PENDING = 'PENDING'; // awaiting processing
     case PROCESSING = 'PROCESSING'; // being prepared for shipment
+
     case SHIPPED = 'SHIPPED'; // dispatched from warehouse
     case IN_TRANSIT = 'IN_TRANSIT'; // with carrier
     case OUT_FOR_DELIVERY = 'OUT_FOR_DELIVERY'; // with delivery agent

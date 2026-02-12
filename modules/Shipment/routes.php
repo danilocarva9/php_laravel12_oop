@@ -1,7 +1,8 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use Modules\Shipment\Controllers\ShipmentController;
 
-Route::get('/shipment', function () {
-    return response()->json(['welcome' => 'Shipment Module']);
+Route::group(['prefix' => 'shipment', 'middleware' => 'auth:sanctum'], function () {
+    Route::post('/', [ShipmentController::class, 'updateStatus']);
 });

@@ -1,5 +1,5 @@
 <?php
 
 return [
-    'items_per_page' => 15,
+    'products' => ['max_num_per_product' => 5]
 ];

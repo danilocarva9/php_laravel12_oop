@@ -7,6 +7,8 @@ namespace Modules\Shipment\Models;
 use DomainException;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use InvalidArgumentException;
 use Modules\Order\Models\Order;
 use Modules\Shipment\Enums\ShipmentStatusEnum;
 
@@ -20,7 +22,6 @@ use Modules\Shipment\Enums\ShipmentStatusEnum;
  */
 final class Shipment extends Model
 {
-
     use HasFactory;
 
     protected $fillable = [
@@ -37,18 +38,18 @@ final class Shipment extends Model
         'delivered_at',
     ];
 
-    protected $cast = [
-        'status' => ShipmentStatusEnum::class
+    protected $casts = [
+        'status' => ShipmentStatusEnum::class,
     ];
 
-    public function order()
+    public function order(): BelongsTo
     {
         return $this->belongsTo(Order::class);
     }
 
-    public static function createShipment(Order $order)
+    public static function createShipment(Order $order): self
     {
-        $order->shipment()->create([
+        return $order->shipment()->create([
             'tracking_number' => self::generateTrackingNumber(),
             'carrier' => 'Default Carrier',
             'status' => ShipmentStatusEnum::PENDING,
@@ -60,29 +61,59 @@ final class Shipment extends Model
         return 'TRK' . strtoupper(uniqid());
     }
 
-    public function markAsShipped(): void
+    private function markAsShipped(): void
     {
-        if ($this->status !== ShipmentStatusEnum::PENDING) {
+        if (in_array($this->status, [
+            ShipmentStatusEnum::PENDING
+        ], true)) {
             throw new DomainException('Order cannot be shipped.');
         }
-
-        $this->changeStatusTo(ShipmentStatusEnum::SHIPPED);
     }
 
-    public function markAsDelivered(): void
+    private function markAsInTransit(): void
     {
-        if ($this->status !== ShipmentStatusEnum::FAILED) {
-            throw new DomainException('A failed shipment cant be delivered.');
+        if (in_array($this->status, [
+            ShipmentStatusEnum::DELIVERED,
+            ShipmentStatusEnum::FAILED,
+        ], true)) {
+            throw new DomainException('Order cannot be in transit.');
         }
-
-        $this->changeStatusTo(ShipmentStatusEnum::DELIVERED);
     }
 
-    private function changeStatusTo(ShipmentStatusEnum $status): void
+    private function markAsOutForDelivery(): void
     {
+        if (in_array($this->status, [
+            ShipmentStatusEnum::PENDING,
+            ShipmentStatusEnum::PROCESSING,
+        ], true)) {
+            throw new DomainException('The shipment cant be delivered.');
+        }
+    }
+
+    private function markAsDelivered(): void
+    {
+        if (in_array($this->status, [
+            ShipmentStatusEnum::FAILED,
+            ShipmentStatusEnum::RETURNED,
+            ShipmentStatusEnum::CANCELLED,
+        ], true)) {
+            throw new DomainException('The shipment cant be delivered.');
+        }
+    }
+
+    public function updateStatus(ShipmentStatusEnum $status): void
+    {
+        match ($status) {
+            ShipmentStatusEnum::SHIPPED => $this->markAsShipped(),
+            ShipmentStatusEnum::IN_TRANSIT => $this->markAsInTransit(),
+            ShipmentStatusEnum::OUT_FOR_DELIVERY => $this->markAsOutForDelivery(),
+            ShipmentStatusEnum::DELIVERED => $this->markAsDelivered(),
+            default => throw new DomainException('Invalid shipment status transition')
+        };
+
         $this->update([
             'status' => $status,
-            'updated_at' => now()
+            'updated_at' => now(),
         ]);
     }
 }
