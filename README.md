@@ -193,6 +193,7 @@ docker compose logs -f
 -   The main Laravel container is assumed to be named **`laravel_app`**.
 -   All Artisan and Composer commands should be executed inside this container.
 -   Environment variables should be configured via `.env` as usual for Laravel projects.
+-   This app contains a Laravel telescope Dashboard that runs only on local env, to access add /telescope
 
 ---
 
